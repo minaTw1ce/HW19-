@@ -53,7 +53,7 @@ int main() {
     // Open the file
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
-        printf("Error opening file. Exiting.\n");
+        printf("Error opening file.\n");
         return 1;
     }
 
@@ -89,16 +89,16 @@ int main() {
 
     // Calculate and display results
     printf("\nPieces of Data: %d rows\n", rows);
-    printf("AMP: Average=%.3fmV, Median=%.3fmV, Standard Deviation=%.3fmV\n",
+    printf("AMP: Average = %.3fmV, Median = %.3fmV, Standard Deviation = %.3fmV\n",
            average(ampdata, rows), median(ampdata, rows), std_dev(ampdata, rows, average(ampdata, rows)));
 
-    printf("OW: Average=%.3fdB, Median=%.3fdB, Standard Deviation=%.3fdB\n",
+    printf("OW: Average = %.3fdB, Median = %.3fdB, Standard Deviation = %.3fdB\n",
            average(owdata, rows), median(owdata, rows), std_dev(owdata, rows, average(owdata, rows)));
 
-    printf("RES: Average=%.3f, Median=%.3f, Standard Deviation=%.3f\n",
+    printf("RES: Average = %.3f, Median = %.3f, Standard Deviation = %.3f\n",
            average(resdata, rows), median(resdata, rows), std_dev(resdata, rows, average(resdata, rows)));
 
-    printf("TW: Average=%.3fnm, Median=%.3fnm, Standard Deviation=%.3fnm\n",
+    printf("TW: Average = %.3fnm, Median = %.3fnm, Standard Deviation = %.3fnm\n",
            average(twdata, rows), median(twdata, rows), std_dev(twdata, rows, average(twdata, rows)));
 
     // Free allocated memory
