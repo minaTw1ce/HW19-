@@ -71,41 +71,41 @@ int main() {
     rewind(file);
 
     // Allocate memory for the data
-    double *amp_data = (double *)malloc(rows * sizeof(double));
-    double *ow_data = (double *)malloc(rows * sizeof(double));
-    double *res_data = (double *)malloc(rows * sizeof(double));
-    double *tw_data = (double *)malloc(rows * sizeof(double));
+    double *ampdata = (double *)malloc(rows * sizeof(double));
+    double *owdata = (double *)malloc(rows * sizeof(double));
+    double *resdata = (double *)malloc(rows * sizeof(double));
+    double *twdata = (double *)malloc(rows * sizeof(double));
 
     // Skip the header row again
     fgets(buffer, sizeof(buffer), file);
 
     // Read data from the file
     for (int i = 0; i < rows; i++) {
-        fscanf(file, "%lf %lf %lf %lf", &amp_data[i], &ow_data[i], &res_data[i], &tw_data[i]);
+        fscanf(file, "%lf %lf %lf %lf", &ampdata[i], &owdata[i], &resdata[i], &twdata[i]);
     }
 
     // Close the file
     fclose(file);
 
     // Calculate and display results
-    printf("\n Pieces of Data: %d rows\n", rows);
+    printf("\nPieces of Data: %d rows\n", rows);
     printf("AMP: Average=%.3fmV, Median=%.3fmV, Standard Deviation=%.3fmV\n",
-           average(amp_data, rows), median(amp_data, rows), std_dev(amp_data, rows, average(amp_data, rows)));
+           average(ampdata, rows), median(ampdata, rows), std_dev(ampdata, rows, average(ampdata, rows)));
 
     printf("OW: Average=%.3fdB, Median=%.3fdB, Standard Deviation=%.3fdB\n",
-           average(ow_data, rows), median(ow_data, rows), std_dev(ow_data, rows, average(ow_data, rows)));
+           average(owdata, rows), median(owdata, rows), std_dev(owdata, rows, average(owdata, rows)));
 
     printf("RES: Average=%.3f, Median=%.3f, Standard Deviation=%.3f\n",
-           average(res_data, rows), median(res_data, rows), std_dev(res_data, rows, average(res_data, rows)));
+           average(resdata, rows), median(resdata, rows), std_dev(resdata, rows, average(resdata, rows)));
 
     printf("TW: Average=%.3fnm, Median=%.3fnm, Standard Deviation=%.3fnm\n",
-           average(tw_data, rows), median(tw_data, rows), std_dev(tw_data, rows, average(tw_data, rows)));
+           average(twdata, rows), median(twdata, rows), std_dev(twdata, rows, average(twdata, rows)));
 
     // Free allocated memory
-    free(amp_data);
-    free(ow_data);
-    free(res_data);
-    free(tw_data);
+    free(ampdata);
+    free(owdata);
+    free(resdata);
+    free(twdata);
 
     return 0;
 }
