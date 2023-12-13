@@ -348,36 +348,42 @@ void Calibrate ()
   delay(1000);
   Serial.println("Align z-axis down. When ready press button.");
   while (digitalRead(buttonPin) != LOW) {} // wait until the button is pressed.
-    ReadAllAxis(&xRaw, &yRaw, &zRaw);
-    AutoCalibrate(xRaw, yRaw, zRaw);
-    Serial.println("Calibration completed. \n");
+  ReadAllAxis(&xRaw, &yRaw, &zRaw);
+  AutoCalibrate(xRaw, yRaw, zRaw);
+  Serial.println("Calibration completed. \n");
 }
 // Find the extreme raw readings from each axis
 void AutoCalibrate(int xNew, int yNew, int zNew)
 {
-  if (xNew < xRawMin) // update x Min and Max
-  {
-    xRawMin = xNew;
+  if (digitalRead(buttonPin) == HIGH){  
+    if (xNew < xRawMin) // update x Min and Max
+    {
+      xRawMin = xNew;
+    }
+    if (xNew > xRawMax)
+    {
+      xRawMax = xNew;
+    }
   }
-  if (xNew > xRawMax)
-  {
-    xRawMax = xNew;
+  if (digitalRead(buttonPin) == HIGH){  
+    if (yNew < yRawMin) // update y Min and Max
+    {
+      yRawMin = yNew;
+    }
+    if (yNew > yRawMax)
+    {
+      yRawMax = yNew;
+    }
   }
-  if (yNew < yRawMin) // update y Min and Max
-  {
-    yRawMin = yNew;
-  }
-  if (yNew > yRawMax)
-  {
-    yRawMax = yNew;
-  }
-  if (zNew < zRawMin) // update z Min and Max
-  {
-    zRawMin = zNew;
-  }
-  if (zNew > zRawMax)
-  {
-    zRawMax = zNew;
+  if (digitalRead(buttonPin) == HIGH){  
+    if (zNew < zRawMin) // update z Min and Max
+    {
+      zRawMin = zNew;
+    }
+    if (zNew > zRawMax)
+    {
+      zRawMax = zNew;
+    }
   }
 }
 
