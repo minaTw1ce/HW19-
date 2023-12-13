@@ -103,16 +103,14 @@ int main()
     }
 
     // Skip the header row
-    char buffer[100];
-    fgets(buffer, sizeof(buffer), file);
+    char array[100];
+    fgets(array, sizeof(array), file);
 
     // Count the number of rows in the file
     int rows = 0;
-    while (fgets(buffer, sizeof(buffer), file) != NULL) 
-    {
-        rows++;
+    while (fgets(array, sizeof(array), file) != NULL) {
+        ++rows;
     }
-
     // Rewind the file to read data
     rewind(file);
 
@@ -122,8 +120,8 @@ int main()
     double *resdata = (double *)malloc(rows * sizeof(double));
     double *twdata = (double *)malloc(rows * sizeof(double));
 
-    // Skip the header row again
-    fgets(buffer, sizeof(buffer), file);
+    // Skip the header row
+    fgets(array, sizeof(array), file);
 
     // Read data from the file
     for (int i = 0; i < rows; i++) 
