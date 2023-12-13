@@ -2,49 +2,93 @@
 #include <stdlib.h>
 #include <math.h>
 
+
+//This function sorts an array x with size values into ascending order.
+void sortascend(double x[],int size)
+{
+int k, j, m;
+    double temp;
+    /*  Implement selection sort algorithm.  */
+    for (k=0; k<=size-2; k++)
+        {
+            /*  Exchange minimum with next array value.  */
+            m = k;
+            for (j=k+1; j<=size-1; j++)
+            if (x[j] < x[m])
+            m = j;
+            temp = x[m];
+            x[m] = x[k];
+            x[k] = temp;
+        }
+    /*  Void return.  */
+    return;
+}
+
 // Function to calculate the average of an array
-double average(double* data, int size) {
-    double sum = 0;
-    for (int i = 0; i < size; i++) {
-        sum += data[i];
-    }
-    return sum / size;
+double average(double* data,int size)
+{
+    int i;
+        double sum=0;
+        /*  Determine mean value.  */
+        for (i=0; i<=size-1; i++)
+            sum += data[i];
+        /*  Return mean value.  */
+        return (sum/size);
 }
 
 // Function to calculate the median of an array
-double median(double* data, int size) {
-    // Sort the array in ascending order
-    for (int i = 0; i < size - 1; i++) {
-        for (int j = i + 1; j < size; j++) {
-            if (data[i] > data[j]) {
-                // Swap data[i] and data[j]
-                double temp = data[i];
-                data[i] = data[j];
-                data[j] = temp;
-            }
+double median(double* data, int size) 
+{
+    /*  Declare variables.  */
+        int i;
+        double middle, *temp;
+        /* declare memory for the temporary array */
+        temp = (double *)calloc(size,sizeof(double));
+        if (temp==NULL)
+        {
+                printf("Error allocating temporary array");
+                return (0);
         }
-    }
-
-    // Calculate the median
-    if (size % 2 == 0) {
-        // If even, average the middle two elements
-        return (data[size / 2 - 1] + data[size / 2]) / 2.0;
-    } else {
-        // If odd, return the middle element
-        return data[size / 2];
-    }
+        /* Initialize the temp with the values in x */
+        for (i=0;i<=size-1;i++) temp[i]=data[i];
+        /* Sort the temp */
+        sortascend(temp,size);
+        /*  Determine median value.  */
+        i = (size/2);
+        if (size%2 != 0){
+            middle = temp[i];
+        }
+           
+        else
+        {
+            middle = (temp[i-1] + temp[i])/2.0;
+        }
+        /*  Return median value.  */
+        free(temp);
+        return (middle);
 }
+ // This function returns the variance of an array x with size elements.
+double variance(double x[],int size)
+{
+        /*  Declare variables   */
+        int k;
+        double sum=0, mu;
+        /*  Determine variance.  */
+        mu = average(x,size);
+        for (k=0; k<=size-1; k++)
+        sum += (x[k] - mu)*(x[k] - mu);
+        /*  Return variance.  */
+        return (sum/(size-1));
+    }
 
 // Function to calculate the standard deviation of an array
-double std_dev(double* data, int size, double average) {
-    double sum = 0;
-    for (int i = 0; i < size; i++) {
-        sum += pow(data[i] - average, 2);
-    }
-    return sqrt(sum / size);
+double std_dev(double* data, int size) 
+{
+    return (sqrt(variance(data,size)));
 }
 
-int main() {
+int main() 
+{
     // Get the name of the data file from the user
     char filename[100];
     printf("Enter the name of the data file: ");
@@ -52,7 +96,8 @@ int main() {
 
     // Open the file
     FILE *file = fopen(filename, "r");
-    if (file == NULL) {
+    if (file == NULL) 
+    {
         printf("Error opening file.\n");
         return 1;
     }
@@ -63,7 +108,8 @@ int main() {
 
     // Count the number of rows in the file
     int rows = 0;
-    while (fgets(buffer, sizeof(buffer), file) != NULL) {
+    while (fgets(buffer, sizeof(buffer), file) != NULL) 
+    {
         rows++;
     }
 
@@ -80,7 +126,8 @@ int main() {
     fgets(buffer, sizeof(buffer), file);
 
     // Read data from the file
-    for (int i = 0; i < rows; i++) {
+    for (int i = 0; i < rows; i++) 
+    {
         fscanf(file, "%lf %lf %lf %lf", &ampdata[i], &owdata[i], &resdata[i], &twdata[i]);
     }
 
@@ -89,23 +136,22 @@ int main() {
 
     // Calculate and display results
     printf("\nPieces of Data: %d rows\n", rows);
-    printf("AMP: Average = %.3fmV, Median = %.3fmV, Standard Deviation = %.3fmV\n",
-           average(ampdata, rows), median(ampdata, rows), std_dev(ampdata, rows, average(ampdata, rows)));
+    printf("AMP: Average = %.2fmV, Median = %.2fmV, Standard Deviation = %.2fmV\n",
+           average(ampdata, rows), median(ampdata, rows), std_dev(ampdata, rows));
 
-    printf("OW: Average = %.3fdB, Median = %.3fdB, Standard Deviation = %.3fdB\n",
-           average(owdata, rows), median(owdata, rows), std_dev(owdata, rows, average(owdata, rows)));
+    printf("OW: Average = %.2fdB, Median = %.2fdB, Standard Deviation = %.2fdB\n",
+           average(owdata, rows), median(owdata, rows), std_dev(owdata, rows));
 
-    printf("RES: Average = %.3f, Median = %.3f, Standard Deviation = %.3f\n",
-           average(resdata, rows), median(resdata, rows), std_dev(resdata, rows, average(resdata, rows)));
+    printf("RES: Average = %.2f, Median = %.2f, Standard Deviation = %.2f\n",
+           average(resdata, rows), median(resdata, rows), std_dev(resdata, rows));
 
-    printf("TW: Average = %.3fnm, Median = %.3fnm, Standard Deviation = %.3fnm\n",
-           average(twdata, rows), median(twdata, rows), std_dev(twdata, rows, average(twdata, rows)));
+    printf("TW: Average = %.2fnm, Median = %.2fnm, Standard Deviation = %.2fnm\n",
+           average(twdata, rows), median(twdata, rows), std_dev(twdata, rows));
 
     // Free allocated memory
     free(ampdata);
     free(owdata);
     free(resdata);
     free(twdata);
-
     return 0;
 }
