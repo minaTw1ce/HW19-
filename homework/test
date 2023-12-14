@@ -1,0 +1,33 @@
+Homework 19: Cryptography 
+
+The science of developing secret codes has interested many people for centuries. Some of the simplest codes involve replacing a character, or a group of characters, with another character, or group of	 characters. To easily decode these messages, the decoder needs the “key” that shows the replacement characters. In recent times, computers have been used very successfully to decode many codes that initially were assumed to be unbreakable.  
+
+When encoding messages, generally all the letters are changed to upper or lower case and all punctuation is removed.  What you do with spaces is another matter.  You generally do not want to leave them in because they then define the size of the words.  Most messages can be read in plain text (non-encrypted text) with spaces removed.  Spaces can also make it easier to break a code, because its encoded character would be the most common character in the encoded text. 
+
+For the following homework, you will drop all punctuation and spaces from the text.  Convert it to uppercase and then encode it with the following key. 
+
+char encode_key[26] = "QWERTYUIOPASDFGHJKLZXCVBNM" 
+
+ 
+
+This key takes your letters A...Z and maps them to the following letter in the appropriate spot in the array (e.g. A converts to Q, B converts to W, and Z converts to M).  Note, that the appropriate index (offset) to the array can be calculated with the following code snippet: 
+
+offset = (int)mychar – 65; 
+
+ 
+
+What would the decode key be for this encode key? 
+
+For the homework you need to write a program with the following attributes 
+
+It has an encoding function and the equivalent decoding function for the above encoding key.   
+
+Ask the user if they want to encode or decode a message. 
+
+Ask the user if the message is in a text file. 
+
+if it is in a text file, ask for the name and output the results to a file with a similar name with "enc_" preceding the original name. 
+
+if it is not in a text file, have them enter it at the keyboard and then display the result on the screen. 
+
+Test the program by encoding the string “I am glad this assignment is over!  It was terrible”.  And then use the program to decode it.  Share the results of the encoding and decoding.  Can you read it? 

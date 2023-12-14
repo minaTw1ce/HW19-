@@ -5,3 +5,5 @@
 #define ALPHABET_SIZE 26
 
 char encode_key[ALPHABET_SIZE] = "QWERTYUIOPASDFGHJKLZXCVBNM";
+ 
+ 
