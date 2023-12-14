@@ -11,7 +11,7 @@ I will send a text to the Arduino for different driving modes, save maxmimum x a
 #include <SoftwareSerial.h> //Header File for serial communication on other digital pins of an Arduino
 #include <ArduinoBlue.h> //Header File for Arduino Blue for Bluetooth Joystick
 #include <stdbool.h>  //Header File for boolean states
-#include <EEPROM.h>  //EEPROM library
+#include <EEPROM.h>  //Header File for EEPROM library
 
 //Digital Variables
 const int buttonPin = 3;    // Calibrate Button
