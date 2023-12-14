@@ -1,16 +1,17 @@
 /*
 This program allows you to drive a car using a bluetooth joystick and collect data using different sensing modes. 
-Bluetooth Joystick is able to control the motors using my Phone App. The photoresistor sensor is able to detect light and controls the LED light's brightness.
+Bluetooth Joystick is able to control the motors using my phone app. I can also send texts to arduino, use a button, and drive.
 The Ultrasonic sensor is able to determine the distance between the car and an object in its way. 
-The LED brightness and the distance from the object is stored three times in the EEPROM, ONLY after the joysstick button is clicked.
-The joystick button is clicked three times and there will be 6 values written into these 6 different addresses.
-We will then output these values in a separate program which will read the values that are stored in the EEPROM.
+The Accelerometer is able to calculate acceleration, but must calibrate first. Maximum x and y axis values are saved in EEPROM at the end of the demonstration.
+I will send a text to the Arduino for different driving modes, save maxmimum x and y acceleration values onto EEPROM. 
 */
 
-#include <SoftwareSerial.h> //
+//NEED TO ADD ULTRASONIC SENSOR STUFF
+
+#include <SoftwareSerial.h> //Header File for serial communication on other digital pins of an Arduino
 #include <ArduinoBlue.h> //Header File for Arduino Blue for Bluetooth Joystick
 #include <stdbool.h>  //Header File for boolean states
-#include <EEPROM.h>
+#include <EEPROM.h>  //EEPROM library
 
 //Digital Variables
 const int buttonPin = 3;    // Calibrate Button
@@ -102,8 +103,8 @@ void setup() {
   pinMode(echoPin, INPUT);   //Set echoPin pin as input
 
   //EEPROM debug
-  //storageultra = EEPROM.read(addr);  // debug for EEPROM
-  //storagephoto = EEPROM.read(addr); // debug for EEPROM
+  //int storagex = EEPROM.read(addr1);  // debug for EEPROM
+  //int storagey = EEPROM.read(addr2); // debug for EEPROM
   //Serial.begin(11520);  // debug for EEPROM
 
   Calibrate();
@@ -431,6 +432,7 @@ void recordXMaxAccel(float xAccel) {
 }
 
 //function for auto mode using line sensors
+//collaboration with Kenneth Wang who helped me use the line sensor
 void autoMode() {
   IRvalueA = analogRead(leftLine);  //left
   IRvalueB = analogRead(rightLine);  //right
