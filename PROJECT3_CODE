@@ -95,7 +95,7 @@ void setup() {
   bluetooth.begin(9600);
 
   // delay just in case bluetooth module needs time to "get ready".
-  delay(500); //delay of 500ms
+  //delay(500); //delay of 500ms
 
   //Ultrasonic Sensor
   pinMode(trigPin, OUTPUT);  //Set trigPin pin as output
@@ -175,7 +175,6 @@ void loop() {
     Serial.print(str);
     Serial.write('\n');
   }
-
   ReadAllAxis(&xRaw, &yRaw, &zRaw);
   timenow = millis();
   Serial.print(timenow); Serial.print(", ");
@@ -202,6 +201,7 @@ void loop() {
   stop(); // Call the stopp function
   reverse(); // Call the reverse function
   ultrasonicSensor();  // Call the ultrasonicSensor function
+  recordMaxAccelerations(xAccel, yAccel); // find the maximum acceleration
 }
 
 //Collaboration with Nicolas who helped create this function
@@ -275,7 +275,6 @@ void stop()  //Collaboration with Nicolas and Kenneth who helped me use the joys
     digitalWrite(in4, LOW);
     analogWrite(enA, 0);  //motors ends
     analogWrite(enB, 0);
-
   }
 }
 
@@ -294,6 +293,15 @@ void ultrasonicSensor()
   duration = pulseIn(echoPin, HIGH);  //Measures the time it takes for sound wave to hit object
   distance = (duration * 0.034) / 2;  // Measure distance with the ultrasonic sensor
 }
+boolean debounceCalibrate(boolean last) {
+  boolean current = digitalRead(buttonPin);  //Read the button state
+  if (last != current) {                     //if it's different...
+    delay(5);                                //wait 5ms
+    current = digitalRead(buttonPin);        //read it again
+  }
+  return current;  //return the current value
+}
+
 // Read "sampleSize" samples and report the average
 int ReadAxis(int axisPin)
 {
@@ -313,60 +321,61 @@ void ReadAllAxis (int* xNewptr, int* yNewptr, int* zNewptr)
   *zNewptr = ReadAxis(zInput);
 }
 
+
+
 // Function to calibrate the accelerometer
 void Calibrate() {
-  // initialize all mins and maxes with one read
-  ReadAllAxis(&xRawMin, &yRawMin, &zRawMin);
-  xRawMax = xRawMin;
-  yRawMax = yRawMin;
-  zRawMax = zRawMin;
+    // initialize all mins and maxes with one read
+    ReadAllAxis(&xRawMin, &yRawMin, &zRawMin);
+    xRawMax = xRawMin;
+    yRawMax = yRawMin;
+    zRawMax = zRawMin;
 
-  // Start main calibration
-  Serial.println("Calibrate");
+    // Start main calibration
+    Serial.println("Calibrate");
 
-  // Calibration for x-axis
-  Serial.println("Align x-axis up.  When ready press button.");
-  waitForButtonPress();
-  ReadAllAxis(&xRaw, &yRaw, &zRaw);
-  AutoCalibrate(xRaw, yRaw, zRaw);
-
-  // Calibration for x-axis down
-  Serial.println("Align x-axis down.  When ready press button.");
-  waitForButtonPress();
-  ReadAllAxis(&xRaw, &yRaw, &zRaw);
-  AutoCalibrate(xRaw, yRaw, zRaw);
-
-  // Calibration for y-axis
-  Serial.println("Align y-axis up.  When ready press button.");
-  waitForButtonPress();
-  ReadAllAxis(&xRaw, &yRaw, &zRaw);
-  AutoCalibrate(xRaw, yRaw, zRaw);
-
-  // Calibration for y-axis down
-  Serial.println("Align y-axis down.  When ready press button.");
-  waitForButtonPress();
-  ReadAllAxis(&xRaw, &yRaw, &zRaw);
-  AutoCalibrate(xRaw, yRaw, zRaw);
-
-  // Calibration for z-axis
-  Serial.println("Align z-axis up.  When ready press button.");
-  waitForButtonPress();
-  ReadAllAxis(&xRaw, &yRaw, &zRaw);
-  AutoCalibrate(xRaw, yRaw, zRaw);
-
-  // Calibration for z-axis down
-  Serial.println("Align z-axis down.  When ready press button.");
-  waitForButtonPress();
-  ReadAllAxis(&xRaw, &yRaw, &zRaw);
-  AutoCalibrate(xRaw, yRaw, zRaw);
-
-  Serial.println("Calibration completed. \n");
+    // Calibration for x-axis
+    Serial.println("Align x-axis up.  When ready press button.");
+    while (digitalRead(buttonPin) != LOW) {}
+    ReadAllAxis(&xRaw, &yRaw, &zRaw);
+    AutoCalibrate(xRaw, yRaw, zRaw);
+    delay(1000);
+    // Calibration for x-axis down
+    Serial.println("Align x-axis down.  When ready press button.");
+    while (digitalRead(buttonPin) != LOW) {}
+    ReadAllAxis(&xRaw, &yRaw, &zRaw);
+    AutoCalibrate(xRaw, yRaw, zRaw);
+    delay(1000);
+    // Calibration for y-axis
+    Serial.println("Align y-axis up.  When ready press button.");
+    while (digitalRead(buttonPin) != LOW) {}
+    ReadAllAxis(&xRaw, &yRaw, &zRaw);
+    AutoCalibrate(xRaw, yRaw, zRaw);
+    delay(1000);
+    // Calibration for y-axis down
+    Serial.println("Align y-axis down.  When ready press button.");
+    while (digitalRead(buttonPin) != LOW) {}
+    ReadAllAxis(&xRaw, &yRaw, &zRaw);
+    AutoCalibrate(xRaw, yRaw, zRaw);
+    delay(1000);
+    // Calibration for z-axis
+    Serial.println("Align z-axis up.  When ready press button.");
+    while (digitalRead(buttonPin) != LOW) {}
+    ReadAllAxis(&xRaw, &yRaw, &zRaw);
+    AutoCalibrate(xRaw, yRaw, zRaw);
+    delay(1000);
+    // Calibration for z-axis down
+    Serial.println("Align z-axis down.  When ready press button.");
+    while (digitalRead(buttonPin) != LOW) {}
+    ReadAllAxis(&xRaw, &yRaw, &zRaw);
+    AutoCalibrate(xRaw, yRaw, zRaw);
+    delay(1000);
+    Serial.println("Calibration completed. \n");
 }
 
 // Find the extreme raw readings from each axis
 void AutoCalibrate(int xNew, int yNew, int zNew)
 {
-  if (digitalRead(buttonPin) == HIGH){  
     if (xNew < xRawMin) // update x Min and Max
     {
       xRawMin = xNew;
@@ -375,8 +384,6 @@ void AutoCalibrate(int xNew, int yNew, int zNew)
     {
       xRawMax = xNew;
     }
-  }
-  if (digitalRead(buttonPin) == HIGH){  
     if (yNew < yRawMin) // update y Min and Max
     {
       yRawMin = yNew;
@@ -385,8 +392,6 @@ void AutoCalibrate(int xNew, int yNew, int zNew)
     {
       yRawMax = yNew;
     }
-  }
-  if (digitalRead(buttonPin) == HIGH){  
     if (zNew < zRawMin) // update z Min and Max
     {
       zRawMin = zNew;
@@ -395,7 +400,29 @@ void AutoCalibrate(int xNew, int yNew, int zNew)
     {
       zRawMax = zNew;
     }
-  }
 }
 
+// Function to calculate and record maximum accelerations
+void recordMaxAccelerations(float xAccel, float yAccel) 
+{
+  // Read previously recorded maximum accelerations from EEPROM
+  float maxAccelX = EEPROM.readFloat(EEPROM_ADDR_MAX_ACCEL_X);
+  float maxAccelY = EEPROM.readFloat(EEPROM_ADDR_MAX_ACCEL_Y);
+  // Check and update the maximum acceleration in the x-axis
+  
+     if (xAccel > maxAccelX) 
+     {
+          maxAccelX = xAccel;         
+     }
 
+     // Check and update the maximum acceleration in the y-axis
+     if (yAccel > maxAccelY) 
+     {
+          maxAccelY = yAccel;  
+      }
+    }
+    if(buttonpress == 1){
+        EEPROM.write(addr1, maxAccelX);
+        EEPROM.write(addr2, maxAccelY);  
+    }
+}
