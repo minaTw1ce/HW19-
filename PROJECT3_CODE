@@ -95,7 +95,7 @@ void setup() {
   bluetooth.begin(9600);
 
   // delay just in case bluetooth module needs time to "get ready".
-  delay(100);
+  delay(500); //delay of 500ms
 
   //Ultrasonic Sensor
   pinMode(trigPin, OUTPUT);  //Set trigPin pin as output
@@ -312,46 +312,57 @@ void ReadAllAxis (int* xNewptr, int* yNewptr, int* zNewptr)
   *yNewptr = ReadAxis(yInput);
   *zNewptr = ReadAxis(zInput);
 }
-void Calibrate ()
-{
-  // initialize all min and maxs with one read
-  ReadAllAxis(&xRawMin,&yRawMin,&zRawMin);
+
+// Function to calibrate the accelerometer
+void Calibrate() {
+  // initialize all mins and maxes with one read
+  ReadAllAxis(&xRawMin, &yRawMin, &zRawMin);
   xRawMax = xRawMin;
   yRawMax = yRawMin;
   zRawMax = zRawMin;
+
   // Start main calibration
   Serial.println("Calibrate");
-  Serial.println("Align x-axis up. When ready press button.");
-  while (digitalRead(buttonPin) != LOW) {} // wait until the button is pressed.
+
+  // Calibration for x-axis
+  Serial.println("Align x-axis up.  When ready press button.");
+  waitForButtonPress();
   ReadAllAxis(&xRaw, &yRaw, &zRaw);
   AutoCalibrate(xRaw, yRaw, zRaw);
-  delay(1000);
-  Serial.println("Align x-axis down. When ready press button.");
-  while (digitalRead(buttonPin) != LOW) {} // wait until the button is pressed.
+
+  // Calibration for x-axis down
+  Serial.println("Align x-axis down.  When ready press button.");
+  waitForButtonPress();
   ReadAllAxis(&xRaw, &yRaw, &zRaw);
   AutoCalibrate(xRaw, yRaw, zRaw);
-  delay(1000);
-  Serial.println("Align y-axis up. When ready press button.");
-  while (digitalRead(buttonPin) != LOW) {} // wait until the button is pressed.
+
+  // Calibration for y-axis
+  Serial.println("Align y-axis up.  When ready press button.");
+  waitForButtonPress();
   ReadAllAxis(&xRaw, &yRaw, &zRaw);
   AutoCalibrate(xRaw, yRaw, zRaw);
-  delay(1000);
-  Serial.println("Align y-axis down. When ready press button.");
-  while (digitalRead(buttonPin) != LOW) {} // wait until the button is pressed.
+
+  // Calibration for y-axis down
+  Serial.println("Align y-axis down.  When ready press button.");
+  waitForButtonPress();
   ReadAllAxis(&xRaw, &yRaw, &zRaw);
   AutoCalibrate(xRaw, yRaw, zRaw);
-  delay(1000);
-  Serial.println("Align z-axis up. When ready press button.");
-  while (digitalRead(buttonPin) != LOW) {} // wait until the button is pressed.
+
+  // Calibration for z-axis
+  Serial.println("Align z-axis up.  When ready press button.");
+  waitForButtonPress();
   ReadAllAxis(&xRaw, &yRaw, &zRaw);
   AutoCalibrate(xRaw, yRaw, zRaw);
-  delay(1000);
-  Serial.println("Align z-axis down. When ready press button.");
-  while (digitalRead(buttonPin) != LOW) {} // wait until the button is pressed.
+
+  // Calibration for z-axis down
+  Serial.println("Align z-axis down.  When ready press button.");
+  waitForButtonPress();
   ReadAllAxis(&xRaw, &yRaw, &zRaw);
   AutoCalibrate(xRaw, yRaw, zRaw);
+
   Serial.println("Calibration completed. \n");
 }
+
 // Find the extreme raw readings from each axis
 void AutoCalibrate(int xNew, int yNew, int zNew)
 {
