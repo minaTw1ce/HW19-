@@ -5,6 +5,7 @@ It will print out maximum acceleration in the x and y direction of the car.
 I will send a text to the arduino via bluetooth and then the arduino will save the maximum accelerations into the EEPROM then read it via this file. 
 */
 
+//!!! Collaboration with Matt and Roderick and helped them understand how to use EEPROM and make a second file to read the EEPROM
 #include <EEPROM.h> //EEPROM library to import its functions
 
 int addr1 = 5;   // Address where data was stored 1st click for Ultrasonic sensor
